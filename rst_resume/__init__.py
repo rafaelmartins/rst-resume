@@ -66,6 +66,7 @@ app.config['ALLOWED_FORMATS'] = [
     ('odt', _('OpenDocument Text'), 'ODT'),
     ('rst', _('reStructuredText'), 'RST'),
 ]
+app.config.from_envvar('RST_RESUME_SETTINGS')
 
 
 app.jinja_env.globals.update(
@@ -102,7 +103,7 @@ def split_rst_file(locale):
     return rd.get(locale, None)
 
 
-def docutils_base(rst_file, locale, output_format='html', **extra_settings):
+def docutils_base(locale, output_format='html', **extra_settings):
     settings = {
         'input_encoding': 'utf-8',
         'output_encoding': 'utf-8',
@@ -123,11 +124,11 @@ def html_output(locale, **extra_settings):
         extra_settings['stylesheet_path'] = ','.join(stylesheets)
         # force embed_stylesheet, because we don't serve CSS files statically
         extra_settings['embed_stylesheet'] = True
-    return docutils_base(app.config['RST_FILE'], locale, 'html4css1', **extra_settings)
+    return docutils_base(locale, 'html4css1', **extra_settings)
 
 
 def odt_output(locale, **extra_settings):
-    return docutils_base(app.config['RST_FILE'], locale, 'odf_odt', **extra_settings)
+    return docutils_base(locale, 'odf_odt', **extra_settings)
 
 
 def pdf_output(locale, **extra_settings):
@@ -187,9 +188,5 @@ def home():
     return render_template('index.html')
 
 
-# alias for mod_wsgi
-application = app
-
 if __name__ == '__main__':
-    #app.config['STYLESHEETS_DIR'] = 'themes'
     app.run()
