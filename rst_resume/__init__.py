@@ -35,7 +35,7 @@ __url__ = 'http://hg.rafaelmartins.eng.br/rst-resume/'
 __copyright__ = '(c) 2010 %s <%s>' % (__author__, __email__)
 __license__ = 'BSD'
 
-__version__ = '0.1'
+__version__ = '0.1pre'
 
 # code snippet from sphinx
 # http://bitbucket.org/birkenfeld/sphinx/src/tip/sphinx/__init__.py
