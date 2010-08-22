@@ -1,0 +1,2 @@
+include babel.cfg
+include rst_resume/translations/**/LC_MESSAGES/messages.mo

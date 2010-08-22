@@ -23,7 +23,19 @@ from rst2pdf.createpdf import RstToPdf
 import os, re
 cwd = os.path.dirname(os.path.abspath(__file__))
 
-__version__ = '0.1pre'
+__author__ = 'Rafael Goncalves Martins'
+__email__ = 'rafael@rafaelmartins.eng.br'
+
+__description__ = """\
+A small Flask application to serve a resume written using
+RestructuredText in several formats: html, pdf, odt or raw rst.
+"""
+
+__url__ = 'http://hg.rafaelmartins.eng.br/rst-resume/'
+__copyright__ = '(c) 2010 %s <%s>' % (__author__, __email__)
+__license__ = 'BSD'
+
+__version__ = '0.1'
 
 # code snippet from sphinx
 # http://bitbucket.org/birkenfeld/sphinx/src/tip/sphinx/__init__.py
@@ -66,7 +78,12 @@ app.config['ALLOWED_FORMATS'] = [
     ('odt', _('OpenDocument Text'), 'ODT'),
     ('rst', _('reStructuredText'), 'RST'),
 ]
-app.config.from_envvar('RST_RESUME_SETTINGS')
+
+
+try:
+    app.config.from_envvar('RST_RESUME_SETTINGS')
+except RuntimeError:
+    pass
 
 
 app.jinja_env.globals.update(
