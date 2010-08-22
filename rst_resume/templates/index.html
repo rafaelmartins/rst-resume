@@ -1,0 +1,11 @@
+{% extends "base.html" -%}
+{% block body -%}
+<ul>
+    {% for locale in allowed_locales -%}
+    <li>
+        {{ allowed_locales[locale]['help'] }}
+        (<em><small>{{ allowed_locales[locale]['locale'] }}</small></em>)
+    </li>
+    {% endfor -%}
+</ul>
+{% endblock -%}

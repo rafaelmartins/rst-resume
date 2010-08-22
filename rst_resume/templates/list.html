@@ -1,0 +1,14 @@
+{% extends "base.html" -%}
+{% block body -%}
+<h3>{{ _('Available formats:') }}</h3>
+<ul class="article_list">
+    {% for format, name, abbr in allowed_formats -%}
+    <li>
+        <a href="{{ request.url_root + current_locale + '/' + format + '/' }}">
+            {{ name }}
+        </a>
+        <span class="tagline">({{ abbr }})</span>
+    </li>
+    {% endfor -%}
+</ul>
+{% endblock -%}
