@@ -46,6 +46,7 @@ if '+' in __version__ or 'pre' in __version__:
 
 
 app = Flask(__name__)
+babel = Babel(app)
 app.config['RST_FILE'] = os.path.join(cwd, 'resume.rst')
 app.config['ALLOWED_LOCALES'] = {
     'en-us': {
@@ -64,16 +65,15 @@ app.config['ALLOWED_FORMATS'] = [
     ('pdf', _('Portable Document Format'), 'PDF'),
     ('odt', _('OpenDocument Text'), 'ODT'),
     ('rst', _('reStructuredText'), 'RST'),
-    
 ]
 
-babel = Babel(app)
 
 app.jinja_env.globals.update(
     author = app.config.get('AUTHOR', _('Your name')),
     allowed_locales = app.config.get('ALLOWED_LOCALES', {}),
     version = __version__
 )
+
 
 @babel.localeselector
 def get_locale():
@@ -91,61 +91,68 @@ def load_stylesheets(pattern):
     if config_dir is not None:
         stylesheets += glob(os.path.join(config_dir, pattern))
     return stylesheets
-    
 
-def docutils_base(rst_file, output_format='html', **extra_settings):
+
+def split_rst_file(locale):
+    with open(app.config['RST_FILE'], 'r', encoding='utf-8') as fp:
+        pieces = re.split(r'.. language: ([a-zA-Z-]+)', fp.read())
+    rd = {}
+    for i in range(1, len(pieces), 2):
+        rd[pieces[i]] = pieces[i+1].strip()
+    return rd.get(locale, None)
+
+
+def docutils_base(rst_file, locale, output_format='html', **extra_settings):
     settings = {
         'input_encoding': 'utf-8',
         'output_encoding': 'utf-8',
         'doctitle_xform': 0,
     }
     settings.update(extra_settings)
-    with open(rst_file, 'r', encoding='utf-8') as fp:
-        rs = publish_string(
-            source = fp.read(),
-            writer_name = output_format,
-            settings_overrides = settings
-        )
+    rs = publish_string(
+        source = split_rst_file(locale),
+        writer_name = output_format,
+        settings_overrides = settings
+    )
     return rs
 
 
-def html_output(**extra_settings):
+def html_output(locale, **extra_settings):
     if 'stylesheet_path' not in extra_settings:
         stylesheets = load_stylesheets('*.css')
         extra_settings['stylesheet_path'] = ','.join(stylesheets)
         # force embed_stylesheet, because we don't serve CSS files statically
         extra_settings['embed_stylesheet'] = True
-    return docutils_base(app.config['RST_FILE'], 'html4css1', **extra_settings)
+    return docutils_base(app.config['RST_FILE'], locale, 'html4css1', **extra_settings)
 
 
-def odt_output(**extra_settings):
-    return docutils_base(app.config['RST_FILE'], 'odf_odt', **extra_settings)
+def odt_output(locale, **extra_settings):
+    return docutils_base(app.config['RST_FILE'], locale, 'odf_odt', **extra_settings)
 
 
-def pdf_output(**extra_settings):
+def pdf_output(locale, **extra_settings):
     if 'styleshees' not in extra_settings:
         extra_settings['stylesheets'] = load_stylesheets('*.style')
     parser = RstToPdf(**extra_settings)
-    with open(app.config['RST_FILE'], 'r', encoding='utf-8') as fp:
-        with closing(StringIO()) as fp_:
-            parser.createPdf(
-                text=fp.read(),
-                output=fp_,
-            )
-            rs = fp_.getvalue()
+    with closing(StringIO()) as fp:
+        parser.createPdf(
+            text = split_rst_file(locale),
+            output = fp,
+        )
+        rs = fp.getvalue()
     return rs
 
 
 @app.route('/<locale>/html/')
 def html(locale):
-    response = Response(html_output())
+    response = Response(html_output(locale))
     response.headers['Content-Disposition'] = 'inline; filename="resume.html"'
     return response
 
 
 @app.route('/<locale>/pdf/')
 def pdf(locale):
-    response = Response(pdf_output(), mimetype = 'application/pdf',)
+    response = Response(pdf_output(locale), mimetype = 'application/pdf',)
     response.headers['Content-Disposition'] = 'inline; filename="resume.pdf"'
     return response
 
@@ -153,7 +160,7 @@ def pdf(locale):
 @app.route('/<locale>/odt/')
 def odt(locale):
     response = Response(
-        odt_output(),
+        odt_output(locale),
         mimetype = 'application/vnd.oasis.opendocument.text',
     )
     response.headers['Content-Disposition'] = 'inline; filename="resume.odt"'
@@ -162,8 +169,7 @@ def odt(locale):
 
 @app.route('/<locale>/rst/')
 def rst(locale):
-    with open(app.config['RST_FILE'], 'r', encoding='utf-8') as fp:
-        response = Response(fp.read(), mimetype = 'text/plain')
+    response = Response(split_rst_file(locale), mimetype = 'text/plain')
     response.headers['Content-Disposition'] = 'inline; filename="resume.rst"'
     return response
 

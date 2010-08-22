@@ -1,4 +1,5 @@
 \.py[co]$
+\.mo$
 ^env/
 ^rst_resume/themes/
 ^rst_resume/resume\.rst$

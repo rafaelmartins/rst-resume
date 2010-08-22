@@ -1,6 +1,6 @@
 {% extends "base.html" -%}
 {% block body -%}
-<ul>
+<ul class="article_list">
     {% for locale in allowed_locales -%}
     <li>
         {{ allowed_locales[locale]['help'] }}

@@ -5,7 +5,7 @@
     {% for format, name, abbr in allowed_formats -%}
     <li>
         <a href="{{ request.url_root + current_locale + '/' + format + '/' }}">
-            {{ name }}
+            {{ name|safe }}
         </a>
         <span class="tagline">({{ abbr }})</span>
     </li>

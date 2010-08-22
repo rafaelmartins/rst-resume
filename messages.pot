@@ -1,0 +1,50 @@
+# Translations template for rst-resume.
+# Copyright (C) 2010 Rafael Goncalves Martins
+# This file is distributed under the same license as the rst-resume project.
+# Rafael Goncalves Martins <rafael@rafaelmartins.eng.br>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1pre\n"
+"Report-Msgid-Bugs-To: rafael@rafaelmartins.eng.br\n"
+"POT-Creation-Date: 2010-08-21 23:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.5\n"
+
+#: rst_resume/__init__.py:64
+msgid "HyperText Markup Language"
+msgstr ""
+
+#: rst_resume/__init__.py:65
+msgid "Portable Document Format"
+msgstr ""
+
+#: rst_resume/__init__.py:66
+msgid "OpenDocument Text"
+msgstr ""
+
+#: rst_resume/__init__.py:67
+msgid "reStructuredText"
+msgstr ""
+
+#: rst_resume/__init__.py:72
+msgid "Your name"
+msgstr ""
+
+#: rst_resume/templates/base.html:6 rst_resume/templates/base.html:11
+msgid "Resume"
+msgstr ""
+
+#: rst_resume/templates/base.html:34
+msgid "Created using"
+msgstr ""
+
+#: rst_resume/templates/list.html:3
+msgid "Available formats:"
+msgstr ""
+
