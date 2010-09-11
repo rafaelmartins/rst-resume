@@ -1,0 +1,70 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+    rst-resume
+    ~~~~~~~~~~
+    
+    The main script (and WSGI application).
+    
+    :copyright: (c) 2010 by Rafael Goncalves Martins
+    :license: BSD, see LICENSE for more details.
+"""
+
+import os, sys
+cwd = os.path.dirname(os.path.abspath(__file__))
+
+# adding our package to sys.path, if running from the sources directory
+if os.path.exists(os.path.join(cwd, '..', 'rst_resume', '__init__.py')):
+    sys.path.insert(0, os.path.join(cwd, '..'))
+
+
+import rst_resume
+
+# apache's mod_wsgi looks for the 'application' object
+application = rst_resume.app
+
+
+def main(argv):
+    
+    # we don't need this import for the http server
+    import optparse
+    
+    parser = optparse.OptionParser(
+        usage = '%prog [options]',
+        version = '%prog ' + rst_resume.__version__,
+        description = 'A simple script to run the rst-resume development server.'
+    )
+    
+    parser.add_option(
+        '-d', '--deploy',
+        dest = 'deploy',
+        metavar = 'DIR',
+        help = 'deploy some templates for the commonly needed files.'
+    )
+    
+    parser.add_option(
+        '-r', '--run',
+        dest = 'run',
+        metavar = 'FILE',
+        help = 'run the development server.'
+    )
+    
+    options, args = parser.parse_args(argv[1:])
+    
+    if options.deploy:
+        from rst_resume.deploy import run
+        return run(options.deploy)
+    
+    if options.run:
+        os.environ['RST_RESUME_SETTINGS'] = os.path.abspath(options.run)
+        reload(rst_resume)
+        rst_resume.app.run()
+        return os.EX_OK
+
+    parser.print_usage()
+    return os.EX_USAGE
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
