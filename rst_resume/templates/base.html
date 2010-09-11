@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="generator" content="rst-resume" />  
+        <meta name="generator" content="rst-resume {{ version }}" />  
         <title>{{ _('Resume') }} - {{ author }}</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     </head>
@@ -34,6 +34,12 @@
             {{ author }}. {{ _('Created using') }}
             <em><strong>rst-resume</strong></em>
             <small>{{ version }}</small>.
+            <br />
+            <a href="http://flask.pocoo.org/">
+                <img src="http://flask.pocoo.org/static/badges/powered-by-flask-s.png"
+                     border="0" alt="powered by Flask" title="powered by Flask"
+                     class="badge" />
+            </a>
         </div>
     </body>
 </html>

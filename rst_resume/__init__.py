@@ -151,6 +151,8 @@ def odt_output(locale, **extra_settings):
 def pdf_output(locale, **extra_settings):
     if 'styleshees' not in extra_settings:
         extra_settings['stylesheets'] = load_stylesheets('*.style')
+    if 'breaklevel' not in extra_settings:
+        extra_settings['breaklevel'] = 0
     parser = RstToPdf(**extra_settings)
     with closing(StringIO()) as fp:
         parser.createPdf(

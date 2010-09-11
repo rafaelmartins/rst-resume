@@ -98,6 +98,10 @@ body {
     border-top: 1px solid #000000;
 }
 
+.badge {
+    margin: 15px auto;
+}
+
 /** GENERAL **/
 p {
     line-height: 1.4;
