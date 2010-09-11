@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    rst_resume.py
-    ~~~~~~~~~~~~~
+    rst_resume
+    ~~~~~~~~~~
     
     A small Flask application to serve a resume written using
     RestructuredText in several formats: html, pdf, odt or raw rst.
