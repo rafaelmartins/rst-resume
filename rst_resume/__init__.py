@@ -79,12 +79,7 @@ app.config['ALLOWED_FORMATS'] = [
     ('rst', _('reStructuredText'), 'RST'),
 ]
 
-
-try:
-    app.config.from_envvar('RST_RESUME_SETTINGS')
-except RuntimeError:
-    pass
-
+app.config.from_envvar('RST_RESUME_SETTINGS', True)
 
 app.jinja_env.globals.update(
     author = app.config.get('AUTHOR', _('Your name')),
