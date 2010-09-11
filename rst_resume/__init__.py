@@ -81,11 +81,24 @@ app.config['ALLOWED_FORMATS'] = [
 
 app.config.from_envvar('RST_RESUME_SETTINGS', True)
 
-app.jinja_env.globals.update(
-    author = app.config.get('AUTHOR', _('Your name')),
-    allowed_locales = app.config.get('ALLOWED_LOCALES', {}),
-    version = __version__
-)
+
+@app.context_processor
+def setup_jinja2():
+    return dict(
+        author = app.config.get('AUTHOR', _('Your name')),
+        allowed_locales = app.config.get('LOCALES', {}),
+        version = __version__
+    )
+
+
+@app.before_request
+def available_locales():
+    locales_from_rst = split_rst_file().keys()
+    app.config['LOCALES'] = {}
+    for locale in app.config['ALLOWED_LOCALES']:
+        if locale in locales_from_rst:
+            app.config['LOCALES'][locale] = \
+                app.config['ALLOWED_LOCALES'][locale]
 
 
 @babel.localeselector
@@ -93,8 +106,8 @@ def get_locale():
     match = re.match(r'/(?P<locale>[^/]+).*', request.path)
     if match is not None:
         locale = match.group('locale')
-        if locale in app.config['ALLOWED_LOCALES']:
-            return app.config['ALLOWED_LOCALES'][locale]['locale']
+        if locale in app.config['LOCALES']:
+            return app.config['LOCALES'][locale]['locale']
 
 
 def load_stylesheets(pattern):
@@ -106,12 +119,14 @@ def load_stylesheets(pattern):
     return stylesheets
 
 
-def split_rst_file(locale):
+def split_rst_file(locale=None):
     with open(app.config['RST_FILE'], 'r', encoding='utf-8') as fp:
         pieces = re.split(r'.. language: ([a-zA-Z-]+)', fp.read())
     rd = {}
     for i in range(1, len(pieces), 2):
         rd[pieces[i]] = pieces[i+1].strip()
+    if locale is None:
+        return rd
     return rd.get(locale, None)
 
 
