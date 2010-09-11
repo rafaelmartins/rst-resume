@@ -15,7 +15,7 @@ from codecs import open
 from contextlib import closing
 from cStringIO import StringIO
 from docutils.core import publish_string
-from flask import Flask, Response, request, render_template
+from flask import Flask, Response, redirect, request, render_template
 from flaskext.babel import Babel, lazy_gettext as _
 from glob import glob
 from rst2pdf.createpdf import RstToPdf
@@ -214,6 +214,9 @@ def list_files(locale):
 
 @app.route('/')
 def home():
+    if len(app.config['LOCALES']) == 1:
+        locale = app.config['LOCALES'].keys()[0]
+        return redirect(request.url_root + locale + '/')
     return render_template('index.html')
 
 
