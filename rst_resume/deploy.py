@@ -41,6 +41,7 @@ Put your English data here...
 
 
 def run(directory):
+    os.makedirs(directory)
     for file in files:
         try:
             my_file = os.path.join(directory, file)
