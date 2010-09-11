@@ -36,20 +36,33 @@ STYLESHEETS_DIR = os.path.join(cwd, 'stylesheets')
 Put your English data here...
 
 """,
+    'resume.wsgi': """\
+# -*- coding: utf-8 -*-
+
+import os
+
+cwd = os.path.dirname(os.path.abspath(__file__))
+os.environ['RST_RESUME_SETTINGS'] = os.path.join(cwd, 'resume.cfg')
+
+from rst_resume import app as application
+
+""",
     'stylesheets': None,
 }
 
 
 def run(directory):
-    os.makedirs(directory)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     for file in files:
         try:
             my_file = os.path.join(directory, file)
-            if files[file] is not None:
-                with open(my_file, 'w', encoding='utf-8') as fp:
-                    fp.write(files[file])
-            else:
-                os.makedirs(os.path.join(directory, 'stylesheets'))
+            if not os.path.exists(my_file):
+                if files[file] is not None:
+                    with open(my_file, 'w', encoding='utf-8') as fp:
+                        fp.write(files[file])
+                else:
+                    os.makedirs(os.path.join(directory, 'stylesheets'))
         except Exception, err:
             print >> sys.stderr, err
             return os.EX_OSERR

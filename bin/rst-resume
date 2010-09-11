@@ -18,11 +18,7 @@ cwd = os.path.dirname(os.path.abspath(__file__))
 if os.path.exists(os.path.join(cwd, '..', 'rst_resume', '__init__.py')):
     sys.path.insert(0, os.path.join(cwd, '..'))
 
-
 import rst_resume
-
-# apache's mod_wsgi looks for the 'application' object
-application = rst_resume.app
 
 
 def main(argv):
