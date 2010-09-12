@@ -4,7 +4,7 @@
 <ul class="article_list">
     {% for format, name, abbr in allowed_formats -%}
     <li>
-        <a href="{{ request.url_root + current_locale + '/' + format + '/' }}">
+        <a href="{{ request.url_root + current_locale + '/resume.' + format }}">
             {{ name|safe }}
         </a>
         <span class="tagline">({{ abbr }})</span>

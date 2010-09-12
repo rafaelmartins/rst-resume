@@ -173,35 +173,27 @@ def pdf_output(locale, **extra_settings):
     return rs
 
 
-@app.route('/<locale>/html/')
+@app.route('/<locale>/resume.html')
 def html(locale):
-    response = Response(html_output(locale))
-    response.headers['Content-Disposition'] = 'inline; filename="resume.html"'
-    return response
+    return html_output(locale)
 
 
-@app.route('/<locale>/pdf/')
+@app.route('/<locale>/resume.pdf')
 def pdf(locale):
-    response = Response(pdf_output(locale), mimetype = 'application/pdf',)
-    response.headers['Content-Disposition'] = 'inline; filename="resume.pdf"'
-    return response
+    return Response(pdf_output(locale), mimetype = 'application/pdf')
 
 
-@app.route('/<locale>/odt/')
+@app.route('/<locale>/resume.odt')
 def odt(locale):
-    response = Response(
+    return Response(
         odt_output(locale),
         mimetype = 'application/vnd.oasis.opendocument.text',
     )
-    response.headers['Content-Disposition'] = 'inline; filename="resume.odt"'
-    return response
 
 
-@app.route('/<locale>/rst/')
+@app.route('/<locale>/resume.rst')
 def rst(locale):
-    response = Response(split_rst_file(locale), mimetype = 'text/plain')
-    response.headers['Content-Disposition'] = 'inline; filename="resume.rst"'
-    return response
+    return Response(split_rst_file(locale), mimetype = 'text/plain')
 
 
 @app.route('/<locale>/')
