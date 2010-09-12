@@ -34,6 +34,7 @@ setup(
     url = rst_resume.__url__,
     packages = find_packages(),
     include_package_data = True,
+    scripts = ['bin/rst-resume'],
     install_requires = [
         'Flask>=0.6',
         'Flask-Babel>=0.6',
