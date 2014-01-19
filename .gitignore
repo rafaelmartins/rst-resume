@@ -1,0 +1,10 @@
+*.pyc
+*.pyo
+*.mo
+/env/
+/rst_resume/themes/
+/rst_resume/resume.rst
+/rst_resume.egg-info
+/build/
+/dist/
+/MANIFEST
