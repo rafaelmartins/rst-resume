@@ -31,7 +31,7 @@ A small Flask application to serve a resume written using
 RestructuredText in several formats: html, pdf, odt or raw rst.
 """
 
-__url__ = 'http://hg.rafaelmartins.eng.br/rst-resume/'
+__url__ = 'https://github.com/rafaelmartins/rst-resume'
 __copyright__ = '(c) 2010 %s <%s>' % (__author__, __email__)
 __license__ = 'BSD'
 
